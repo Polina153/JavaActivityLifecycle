@@ -1,13 +1,9 @@
 package com.example.javaactivitylifecycle;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -108,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Counters counters;
 
+    private final static String KEY_COUNTERS = "Counters";
+
     private TextView textCounter1;  // пользовательский элемент 1-го счетчика
     private TextView textCounter2;  // пользовательский элемент 2-го счетчика
     private TextView textCounter3;  // пользовательский элемент 3-го счетчика
@@ -138,21 +136,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button3.setOnClickListener(this);
     }
 
+    // Обработка кнопки через атрибут onClick в макете
+    public void button1_onClick(View view) {
+        counters.incrementCounter1();
+        setTextCounter(textCounter1, counters.getCounter1());
+    }
+
     private void initButton2ClickListener() {
         Button button2 = findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counters.incrementCounter1();
-                setTextCounter(textCounter2, counters.getCounter1());
+                counters.incrementCounter2();
+                setTextCounter(textCounter2, counters.getCounter2());
             }
         });
-    }
-
-    // Обработка кнопки через атрибут onClick в макете
-    public void button1_onClick(View view) {
-        counters.incrementCounter2();
-        setTextCounter(textCounter1, counters.getCounter2());
     }
 
     @Override
@@ -175,6 +173,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setTextCounter(TextView textCounter, int counter) {
         textCounter.setText(String.format(Locale.getDefault(), "%d", counter));
     }
+
+    // Сохранение данных
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+        instanceState.putSerializable(KEY_COUNTERS, counters);
+    }
+
+    // Восстановление данных
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle instanceState) {
+        super.onRestoreInstanceState(instanceState);
+        counters = (Counters) instanceState.getSerializable(KEY_COUNTERS);
+        setTextCounters();
+    }
+
+    // Отображение данных на экране
+    private void setTextCounters() {
+        setTextCounter(textCounter1, counters.getCounter1());
+        setTextCounter(textCounter2, counters.getCounter2());
+        setTextCounter(textCounter3, counters.getCounter3());
+        setTextCounter(textCounter4, counters.getCounter4());
+    }
+
 
     private void initView() {
         // Получить пользовательские элементы по идентификатору

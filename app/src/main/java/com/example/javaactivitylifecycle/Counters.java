@@ -1,6 +1,7 @@
 package com.example.javaactivitylifecycle;
+import java.io.Serializable;
 
-class Counters {
+class Counters implements Serializable{
     private int counter1;
     private int counter2;
     private int counter3;
