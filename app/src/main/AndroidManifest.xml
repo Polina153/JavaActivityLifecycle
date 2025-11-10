@@ -23,4 +23,3 @@
     </application>
 
 </manifest>
-    <!-- android:configChanges="orientation|screenSize"блокировка поворота экрана-->
